@@ -93,10 +93,10 @@ nodes in [inventory/hosts.inv](inventory/hosts.inv):
 
 ```bash
 [rpi_k8s_slaves]
-rpi-k8s-2 ansible_host=192.168.100.128
-rpi-k8s-3 ansible_host=192.168.100.129
-rpi-k8s-4 ansible_host=192.168.100.130
-rpi-k8s-5 ansible_host=192.168.100.131
+rpi-k8s-2 ansible_host=10.10.10.12
+rpi-k8s-3 ansible_host=10.10.10.13
+rpi-k8s-4 ansible_host=10.10.10.14
+rpi-k8s-5 ansible_host=10.10.10.15
 ```
 
 > NOTE: We may change to an automated inventory being generated if it makes things
@@ -110,7 +110,7 @@ The first node provides the following services for our cluster:
 -   [Apt-Cacher NG](https://www.unix-ag.uni-kl.de/~bloch/acng/) - A package caching proxy to speed up package downloads/installs.
 
 > NOTE: You can also define a static route on your LAN network firewall (if supported)
-> for the subnet (`192.168.100.0/24` in my case) to the wireless IP address that
+> for the subnet (`10.10.10.0/24` in my case) to the wireless IP address that
 > your first node obtains. Or you may add a [static route](#routing) on your Ansible
 > control machine. This will allow you to communicate with all of the
 > cluster nodes once they get an IP via DHCP from the first node.
@@ -141,7 +141,7 @@ there are many different ways to install `kubectl` so head over to the official
 > cluster. There is a catch here though. The certificate is signed with the
 > internal IP address of the K8s master. So in order for this to work correctly
 > you will need to setup a static route on your firewall (if supported) to the
-> subnet `192.168.100.0/24`(in our case) via the wireless IP on your first
+> subnet `10.10.10.0/24`(in our case) via the wireless IP on your first
 > node (also the K8s master). Or you may add a [static route](#routing) on your Ansible
 > control machine.
 
@@ -318,7 +318,7 @@ The important things to ensure that are configured correctly are listed below:
 
 #### [inventory/group_vars/all/all.yml](inventory/group_vars/all/all.yml)
 
-You should change the `dhcp_scope_subnet: 192.168.100`, `dhcp_scope_start_range: "{{ dhcp_scope_subnet }}.128"`, `dhcp_scope_end_range: "{{ dhcp_scope_subnet }}.131"`, and `rpi_nodes`
+You should change the `dhcp_scope_subnet: 10.10.10`, `dhcp_scope_start_range: "{{ dhcp_scope_subnet }}.128"`, `dhcp_scope_end_range: "{{ dhcp_scope_subnet }}.131"`, and `rpi_nodes`
 variables to meet your requirements. Please review [ansible-variables](#ansible-variables)
 for further explanation on the importance of `rpi_nodes`.
 
@@ -330,7 +330,7 @@ dhcp_scope_end_range: "{{ dhcp_scope_subnet }}.131"
 dhcp_scope_start_range: "{{ dhcp_scope_subnet }}.128"
 
 # Defines dhcp scope subnet for isolated network
-dhcp_scope_subnet: 192.168.100
+dhcp_scope_subnet: 10.10.10
 
 # Defines the number of nodes in cluster
 # Extremely important to define correctly, otherwise provisioning will fail.
@@ -355,10 +355,10 @@ that we are treating our slaves as cattle.
 
 ```bash
 [rpi_k8s_slaves]
-rpi-k8s-2 ansible_host=192.168.100.128
-rpi-k8s-3 ansible_host=192.168.100.129
-rpi-k8s-4 ansible_host=192.168.100.130
-rpi-k8s-5 ansible_host=192.168.100.131
+rpi-k8s-2 ansible_host=10.10.10.12
+rpi-k8s-3 ansible_host=10.10.10.13
+rpi-k8s-4 ansible_host=10.10.10.14
+rpi-k8s-5 ansible_host=10.10.10.15
 ```
 
 ### Ansible Playbook
@@ -588,7 +588,7 @@ Now you can open your browser of choice and head [here](http://127.0.0.1:8001/ui
 ### SSH Tunnel
 
 > NOTE: This method will also only work if you have a static route into the cluster
-> subnet `192.168.100.0/24`.
+> subnet `10.10.10.0/24`.
 
 You can also use an SSH tunnel to your Kubernetes master node (any cluster node
 will work, but because the assumption is that the first node will be the only one
